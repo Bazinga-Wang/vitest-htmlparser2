@@ -1,10 +1,21 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Parser, Tokenizer } from "./index.js";
 import type { Handler } from "./Parser.js";
 
-describe("API", () => {
+describe("Parser", () => {
+    let cbs: Partial<Handler>;
+
+    beforeEach(() => {
+        cbs = {
+            onerror: vi.fn(),
+            onopentag: vi.fn(),
+            onclosetag: vi.fn(),
+            ontext: vi.fn(),
+            onend: vi.fn(),
+        };
+    });
+
     it("should work without callbacks", () => {
-        const cbs: Partial<Handler> = { onerror: vi.fn() };
         const p = new Parser(cbs, {
             xmlMode: true,
             lowerCaseAttributeNames: true,
